@@ -1,4 +1,4 @@
-# Day#29: EDR Basics - Detecting Suspicious Network Traffic using Suricata
+Detecting Suspicious Network Traffic using Suricata
 
 ---
 
