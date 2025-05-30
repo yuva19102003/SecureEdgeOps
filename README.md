@@ -1,5 +1,3 @@
-Absolutely! Here's a more **detailed `README.md`** with a **clear workflow explanation**, perfect for showcasing your project in interviews, GitHub, or documentation.
-
 ---
 
 # 🔐 SecureEdgeOps
