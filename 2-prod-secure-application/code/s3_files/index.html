@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Trading Platform</title>
+
+    <script src="https://unpkg.com/lightweight-charts@3.7.0/dist/lightweight-charts.standalone.production.js"></script>
+
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #181818;
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        header {
+            background-color: #121212;
+            color: #fff;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        header .logo h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #0af;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        header nav ul li {
+            display: inline-block;
+        }
+
+        header nav ul li a {
+            text-decoration: none;
+            color: #ddd;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #0af;
+        }
+
+        /* Market Overview Section */
+        #market {
+            padding: 40px 20px;
+            background-color: #222;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #market h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: #fff;
+        }
+
+        .market-info {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #444;
+            width: 25%;
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .market-stat h3 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .market-stat p {
+            margin: 5px 0;
+            color: #aaa;
+        }
+
+        /* Trading Section */
+        #trading {
+            padding: 40px 20px;
+            background-color: #222;
+            margin-top: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #trading h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .trade-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .trade-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trade-form label {
+            margin: 10px 0 5px;
+            font-size: 18px;
+            color: #ddd;
+        }
+
+        .trade-form input,
+        .trade-form select,
+        .trade-form button {
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #444;
+            color: #fff;
+            transition: border 0.3s;
+        }
+
+        .trade-form input:focus,
+        .trade-form select:focus {
+            border-color: #0af;
+            outline: none;
+        }
+
+        .trade-form button {
+            background-color: #0af;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .trade-form button:hover {
+            background-color: #0c88b0;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: #121212;
+            color: #bbb;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Chart Section */
+        #chart-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>TradeMaster</h1>
+            </div>
+            <ul>
+                <li><a href="#market">Market Overview</a></li>
+                <li><a href="#trading">Trading</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Market Overview Section -->
+    <section id="market">
+        <h2>Market Overview</h2>
+        <div class="market-info">
+            <div class="market-stat" id="btc">
+                <h3>Bitcoin (BTC)</h3>
+                <p>Price: $<span id="btc-price">Loading...</span></p>
+                <p>Change: <span id="btc-change">Loading...</span></p>
+                <p>24h High: <span id="btc-high">Loading...</span></p>
+                <p>24h Low: <span id="btc-low">Loading...</span></p>
+            </div>
+            <div class="market-stat" id="eth">
+                <h3>Ethereum (ETH)</h3>
+                <p>Price: $<span id="eth-price">Loading...</span></p>
+                <p>Change: <span id="eth-change">Loading...</span></p>
+                <p>24h High: <span id="eth-high">Loading...</span></p>
+                <p>24h Low: <span id="eth-low">Loading...</span></p>
+            </div>
+            <div class="market-stat" id="ltc">
+                <h3>Litecoin (LTC)</h3>
+                <p>Price: $<span id="ltc-price">Loading...</span></p>
+                <p>Change: <span id="ltc-change">Loading...</span></p>
+                <p>24h High: <span id="ltc-high">Loading...</span></p>
+                <p>24h Low: <span id="ltc-low">Loading...</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Section -->
+    <section id="trading">
+        <h2>Trading Panel</h2>
+        <div class="trade-box">
+            <div class="trade-form">
+                <h3>Buy/Sell</h3>
+                <form id="tradeForm">
+                    <label for="crypto">Select Cryptocurrency:</label>
+                    <select id="crypto" name="crypto">
+                        <option value="bitcoin">Bitcoin (BTC)</option>
+                        <option value="ethereum">Ethereum (ETH)</option>
+                        <option value="litecoin">Litecoin (LTC)</option>
+                    </select>
+
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" placeholder="Amount to trade" required>
+
+                    <label for="action">Action:</label>
+                    <select id="action" name="action">
+                        <option value="buy">Buy</option>
+                        <option value="sell">Sell</option>
+                    </select>
+
+                    <button type="submit">Execute Trade</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Chart Section -->
+    <section id="chart-container">
+        <h2>Price Chart (24h)</h2>
+        <div id="chart" class="chart"></div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 TradeMaster. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Fetch real-time cryptocurrency data from CoinGecko API
+        async function fetchCryptoData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin&vs_currencies=usd&include_24hr_change=true&include_24hr_high=true&include_24hr_low=true');
+                const data = await response.json();
+
+                // Bitcoin Data
+                document.getElementById('btc-price').textContent = data.bitcoin.usd;
+                document.getElementById('btc-change').textContent = data.bitcoin.usd_24h_change.toFixed(2) + '%';
+                document.getElementById('btc-high').textContent = data.bitcoin.usd_24h_high;
+                document.getElementById('btc-low').textContent = data.bitcoin.usd_24h_low;
+
+                // Ethereum Data
+                document.getElementById('eth-price').textContent = data.ethereum.usd;
+                document.getElementById('eth-change').textContent = data.ethereum.usd_24h_change.toFixed(2) + '%';
+                document.getElementById('eth-high').textContent = data.ethereum.usd_24h_high;
+                document.getElementById('eth-low').textContent = data.ethereum.usd_24h_low;
+
+                // Litecoin Data
+                document.getElementById('ltc-price').textContent = data.litecoin.usd;
+                document.getElementById('ltc-change').textContent = data.litecoin.usd_24h_change.toFixed(2) + '%';
+                document.getElementById('ltc-high').textContent = data.litecoin.usd_24h_high;
+                document.getElementById('ltc-low').textContent = data.litecoin.usd_24h_low;
+
+            } catch (error) {
+                console.error("Error fetching crypto data:", error);
+            }
+        }
+
+        // Fetch historical data for charting
+        async function fetchHistoricalData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
+                const data = await response.json();
+                return data.prices.map(priceData => ({
+                    time: priceData[0] / 1000, // convert milliseconds to seconds
+                    value: priceData[1]
+                }));
+            } catch (error) {
+                console.error("Error fetching historical data:", error);
+            }
+        }
+
+        // Initialize the chart
+        async function initializeChart() {
+            const historicalData = await fetchHistoricalData();
+
+            const chart = LightweightCharts.createChart(document.getElementById('chart'), {
+                width: document.getElementById('chart').offsetWidth,
+                height: 400,
+                layout: {
+                    backgroundColor: '#181818',
+                    textColor: '#fff',
+                },
+                grid: {
+                    vertLines: {
+                        color: '#444',
+                    },
+                    horzLines: {
+                        color: '#444',
+                    },
+                },
+                priceScale: {
+                    borderColor: '#444',
+                },
+                crosshair: {
+                    vertLine: {
+                        color: '#0af',
+                    },
+                    horzLine: {
+                        color: '#0af',
+                    },
+                },
+            });
+
+            const lineSeries = chart.addLineSeries({
+                color: '#0af',
+                lineWidth: 2,
+                crosshairMarkerVisible: true,
+            });
+
+            lineSeries.setData(historicalData);
+        }
+
+        // Fetch the data when the page loads
+        window.onload = function() {
+            fetchCryptoData();
+            initializeChart();
+        }
+    </script>
+</body>
+</html>
